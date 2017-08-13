@@ -1,29 +1,24 @@
 package com.cusd80.cchs.roboticsclub;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,11 +32,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.lang.reflect.Type;
 import com.google.gson.reflect.TypeToken;
 
 import org.apache.http.client.ClientProtocolException;
@@ -53,9 +43,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.Manifest.permission.READ_CONTACTS;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-import static android.os.Build.ID;
 
 /**
  * A login screen that offers login via email/password.
@@ -66,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     public static final String EMAIL = "com.cusd80.cchs.roboticsclub.email";
+    public static final String USERNAME = "com.cusd80.cchs.roboticsclub.username";
     private static final int REQUEST_READ_CONTACTS = 0;
 
 
@@ -372,13 +366,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
+        private String mUsername;
         private final String mPassword;
         private final Context mContext;
+        private Boolean displayErrors;
 
         UserLoginTask(String email, String password,Context context) {
             mEmail = email;
             mPassword = password;
             mContext=context;
+            displayErrors=true;
         }
         private boolean registerAccount (String mEmail) {
             Intent registerIntent=new Intent(this.mContext,RegisterActivity.class);
@@ -400,12 +397,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             for (String[] member : ALL_CREDENTIALS) {
                 String email=member[1];
                 String password=member[2];
+                String user=member[4];
                 if (email.equals(mEmail)) {
                     // Account exists, return true if the password matches.
-                    return password.equals(mPassword);
+                    if(password.equals(mPassword)) {
+                        mUsername=user;
+                        return true;
+                    }
                 }
             }
-
+            displayErrors=false;
             registerAccount(mEmail);
             return false;
         }
@@ -419,11 +420,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
             System.out.println(success);
             if (success) {
-                finish();
+                //TODO:Replace finish() with transition to MainActivity
+                gotoMainActivity();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                if(displayErrors) {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
             }
+        }
+
+        private void gotoMainActivity() {
+            Intent mainIntent=new Intent(this.mContext,MainActivity.class);
+            mainIntent.putExtra(EMAIL,mEmail);
+            mainIntent.putExtra(USERNAME,mUsername);
+            startActivity(mainIntent);
+            finish();
         }
 
         @Override

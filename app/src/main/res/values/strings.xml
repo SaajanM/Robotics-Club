@@ -15,10 +15,10 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_passwords_dont_match">Passwords dont match</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+
+    <!-- Activity Related -->
+    <string name="title_activity_main">Points</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
