@@ -17,7 +17,9 @@
             android:title="Account Settings" />
     </group>
 
-    <item android:title="Administrator">
+    <item
+        android:id="@+id/admin_collect"
+        android:title="Administrator">
         <menu>
             <item
                 android:id="@+id/nav_admin"

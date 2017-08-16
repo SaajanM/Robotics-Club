@@ -60,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public static final String EMAIL = "com.cusd80.cchs.roboticsclub.email";
     public static final String USERNAME = "com.cusd80.cchs.roboticsclub.username";
+    private static final String ACCESS_LEVEL = "com.cusd80.cchs.roboticsclub.access_level";
     private static final int REQUEST_READ_CONTACTS = 0;
 
 

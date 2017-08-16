@@ -15,14 +15,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Collection;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String EMAIL = "com.cusd80.cchs.roboticsclub.email";
     public static final String USERNAME = "com.cusd80.cchs.roboticsclub.username";
+    private static final String ACCESS_LEVEL = "com.cusd80.cchs.roboticsclub.access_level";
 
     private NavigationView mNavView;
     private View mHeaderView;
     private TextView mEmailView;
     private TextView mUsernameView;
+    private MenuItem mAdminCollection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,10 +39,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mEmailView=(TextView) mHeaderView.findViewById(R.id.emailView);
         //mEmailView.setHeight(mEmailView.getHeight()+100);
         mUsernameView=(TextView) mHeaderView.findViewById(R.id.usernameView);
+        mAdminCollection=(MenuItem) mHeaderView.findViewById(R.id.admin_collect);
+        mAdminCollection.setVisible(accessLevel());
 
         Intent intent = getIntent();
         String uEmail =intent.getStringExtra(EMAIL);
         String uUsername =intent.getStringExtra(USERNAME);
+
         mEmailView.setText(uEmail);
         mUsernameView.setText(uUsername);
 
